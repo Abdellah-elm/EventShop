@@ -85,6 +85,3 @@ Ce projet est configuré pour un déploiement continu sur **Railway**.
 
 ---
 
-Passionné par la transformation digitale et le leadership.
-
----
