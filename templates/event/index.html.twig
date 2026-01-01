@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue - EventShop{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    
+    {# --- EN-TÊTE --- #}
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-5 mb-3" style="font-family: 'Poppins', sans-serif;">
+            Billetterie <span class="text-warning">En Ligne</span>
+        </h1>
+        
+        {# BARRE DE RECHERCHE #}
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form action="{{ path('app_event_index') }}" method="GET" class="position-relative shadow rounded-pill bg-white">
+                    <input type="text" name="q" class="form-control form-control-lg border-0 rounded-pill ps-5 py-3" 
+                           placeholder="Chercher un événement..." 
+                           value="{{ searchQuery|default('') }}" style="box-shadow: none;">
+                    <button type="submit" class="btn btn-warning rounded-pill position-absolute top-50 end-0 translate-middle-y me-2 fw-bold px-4">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    {# BOUTON ADMIN #}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="d-flex justify-content-end mb-4">
+            <a href="{{ path('app_event_new') }}" class="btn btn-dark shadow-sm">
+                <i class="fas fa-plus-circle text-warning me-2"></i> Créer
+            </a>
+        </div>
+    {% endif %}
+
+    {# GRILLE #}
+    <div class="row g-4">
+        {% for event in events %}
+            {# CALCULS STOCK #}
+            {% set sold = event.billets|length %}
+            {% set remaining = event.capacity - sold %}
+
+            {# --- DESIGN "LUXE ABSTRAIT" --- #}
+            {# Par défaut : Bleu Nuit Profond (Concert) #}
+            {% set bg_class = 'bg-music' %}
+            {% set gradient = 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' %} {# Dark Slate #}
+            {% set icon = 'fa-music' %}
+            {% set category = 'CONCERT' %}
+            {% set accent_color = 'text-info' %}
+            
+            {% set titre = event.title|lower %}
+            
+            {# Rire -> Dégradé Netflix (Rouge sombre / Noir) #}
+            {% if 'rire' in titre or 'humour' in titre or 'stand' in titre %}
+                {% set gradient = 'linear-gradient(135deg, #831843 0%, #500724 100%)' %} {# Dark Pink #}
+                {% set icon = 'fa-microphone-lines' %}
+                {% set category = 'HUMOUR' %}
+                {% set accent_color = 'text-danger' %}
+            
+            {# Théâtre -> Dégradé Or / Noir (Prestige) #}
+            {% elseif 'théâtre' in titre or 'theatre' in titre %}
+                {% set gradient = 'linear-gradient(135deg, #78350f 0%, #451a03 100%)' %} {# Dark Amber #}
+                {% set icon = 'fa-masks-theater' %}
+                {% set category = 'THÉÂTRE' %}
+                {% set accent_color = 'text-warning' %}
+            
+            {# Sport -> Dégradé Émeraude Sombre #}
+            {% elseif 'sport' in titre or 'match' in titre or 'foot' in titre %}
+                {% set gradient = 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)' %} {# Dark Green #}
+                {% set icon = 'fa-futbol' %}
+                {% set category = 'SPORT' %}
+                {% set accent_color = 'text-success' %}
+            
+            {# Festival -> Dégradé Violet Electrique Sombre #}
+            {% elseif 'festival' in titre or 'mawazine' in titre %}
+                {% set gradient = 'linear-gradient(135deg, #4c1d95 0%, #2e1065 100%)' %} {# Dark Violet #}
+                {% set icon = 'fa-guitar' %}
+                {% set category = 'FESTIVAL' %}
+                {% set accent_color = 'text-primary' %}
+            {% endif %}
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-lg rounded-4 overflow-hidden card-hover position-relative" style="background: #fff;">
+                    
+                    {# --- HEADER ARTISTIQUE --- #}
+                    <a href="{{ path('app_event_show', {'id': event.id}) }}" class="text-decoration-none d-block position-relative overflow-hidden" 
+                       style="height: 200px; background: {{ gradient }};">
+                        
+                        {# 1. L'ICÔNE GÉANTE EN FILIGRANE (Watermark) #}
+                        {# C'est ça qui donne le style "Class". Elle est énorme, tournée et transparente. #}
+                        <i class="fas {{ icon }} position-absolute" 
+                           style="font-size: 12rem; right: -40px; bottom: -40px; opacity: 0.1; color: white; transform: rotate(-15deg);"></i>
+                        
+                        {# 2. LE PETIT BADGE CATÉGORIE (Minimaliste) #}
+                        <div class="position-absolute top-50 start-50 translate-middle text-center">
+                            <div class="border border-white border-opacity-25 rounded-pill px-3 py-1 mb-2">
+                                <span class="text-white small fw-bold text-uppercase opacity-75" style="letter-spacing: 2px; font-size: 0.7rem;">
+                                    {{ category }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {# PRIX (En haut à droite) #}
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-white bg-opacity-10 backdrop-blur text-white border border-white border-opacity-25 fw-bold py-2 px-3 rounded-pill">
+                                {{ event.price ? event.price ~ ' MAD' : 'Gratuit' }}
+                            </span>
+                        </div>
+                    </a>
+                    
+                    {# BOUTON ADMIN (Crayon) #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="position-absolute top-0 start-0 m-3" style="z-index: 10;">
+                            <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-light btn-sm shadow-sm rounded-circle" style="width: 35px; height: 35px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-pen text-dark"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body p-4 pt-4">
+                        {# INFO LIEU #}
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-map-pin {{ accent_color }} me-2 small"></i>
+                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.75rem;">{{ event.location }}</span>
+                        </div>
+                        
+                        {# TITRE #}
+                        <a href="{{ path('app_event_show', {'id': event.id}) }}" class="text-decoration-none text-dark">
+                            <h5 class="card-title fw-bold mb-3 fs-4" style="font-family: 'Poppins', sans-serif;">{{ event.title }}</h5>
+                        </a>
+
+                        {# DATE #}
+                        <div class="mb-4 text-muted small">
+                            <i class="far fa-calendar me-2"></i> {{ event.dateStart ? event.dateStart|date('d F Y à H:i') : 'Date à venir' }}
+                        </div>
+
+                        {# BOUTONS #}
+                        <div class="d-grid">
+                            {% if remaining > 0 %}
+                                <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-dark rounded-pill py-2 fw-bold" style="background-color: #0f172a;">
+                                    Réserver un billet
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-light border rounded-pill py-2 disabled text-muted">
+                                    Complet
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# CSS SPECIFIQUE POUR L'EFFET DE FLOU #}
+    <style>
+        .backdrop-blur {
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+        }
+    </style>
+</div>
+
+<style>
+    .card-hover:hover { transform: translateY(-5px); transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1)!important; }
+</style>
+{% endblock %}

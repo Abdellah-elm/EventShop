@@ -1,17 +1,221 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}EventShop{% endblock %}</title>
+        
+        {# 1. Google Fonts (Pour le look Pro) #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+        {# 2. Bootstrap 5 #}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        
+        {# 3. FontAwesome #}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+        {# 4. Chart.js #}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        {# 5. TON CSS PERSONNALISÉ (Directement ici pour l'instant) #}
+        <style>
+            :root {
+                --primary-dark: #0f172a; /* Bleu nuit profond */
+                --accent-gold: #fbbf24;  /* Doré */
+                --accent-orange: #f59e0b; /* Orange */
+            }
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f8f9fa;
+                color: #334155;
+            }
+            h1, h2, h3, h4, h5, .navbar-brand {
+                font-family: 'Poppins', sans-serif;
+            }
+            /* Navbar stylisée */
+            .navbar-custom {
+                background-color: var(--primary-dark);
+                padding: 1rem 0;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+                color: white !important;
+                letter-spacing: -0.5px;
+            }
+            .nav-link {
+                color: rgba(255,255,255,0.75) !important;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+            .nav-link:hover, .nav-link.active {
+                color: var(--accent-gold) !important;
+            }
+            /* Bouton Gradient "Wow" */
+            .btn-gradient {
+                background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+                border: none;
+                color: #000;
+                font-weight: 700;
+                border-radius: 50px; /* Bouton arrondi */
+                padding: 0.5rem 1.5rem;
+                transition: transform 0.2s;
+            }
+            .btn-gradient:hover {
+                transform: translateY(-2px); /* Petit saut au survol */
+                box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+                color: #000;
+            }
+            /* Footer Pro */
+            footer {
+                background-color: var(--primary-dark);
+                color: rgba(255,255,255,0.6);
+            }
+            footer h5 { color: white; }
+            footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+            footer a:hover { color: var(--accent-gold); }
+        </style>
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="d-flex flex-column min-vh-100">
+        
+        {# --- BARRE DE NAVIGATION PREMIUM --- #}
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('app_event_index') }}">
+                    <i class="fas fa-ticket-alt text-warning me-2"></i>Event<span class="fw-light">Shop</span>
+                </a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_event_index') }}">Découvrir les événements</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-3">
+                        
+                        {# CAS 1 : UTILISATEUR CONNECTÉ #}
+                        {% if app.user %}
+                            
+                            {# Panier #}
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" href="{{ path('app_panier_index') }}">
+                                    <i class="fas fa-shopping-cart fa-lg"></i>
+                                    {% if app.user.paniers|length > 0 %}
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-dark">
+                                            {{ app.user.paniers|length }}
+                                        </span>
+                                    {% endif %}
+                                </a>
+                            </li>
+
+                            {# Dropdown User #}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                                    <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px;">
+                                        {{ app.user.nom|first|upper }}
+                                    </div>
+                                    <span class="d-none d-md-inline">{{ app.user.nom }}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3">
+                                    <li><h6 class="dropdown-header">Mon Compte</h6></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_my_tickets') }}"><i class="fas fa-ticket-alt me-2 text-primary"></i> Mes Billets</a></li>
+                                    
+                                    {# SECTION ADMIN #}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><h6 class="dropdown-header text-danger">Zone Admin</h6></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_admin_dashboard') }}"><i class="fas fa-chart-line me-2"></i> Dashboard</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_event_new') }}"><i class="fas fa-plus-circle me-2"></i> Créer Event</a></li>
+                                    {% endif %}
+                                    
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger fw-bold" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+                                </ul>
+                            </li>
+
+                        {# CAS 2 : VISITEUR #}
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-gradient shadow-sm" href="{{ path('app_register') }}">
+                                    Commencer <i class="fas fa-arrow-right ms-1 small"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {# --- ALERTS FLASH FLOTTANTES --- #}
+        <div class="container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050; margin-top: 80px;">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow-lg border-0 rounded-3" role="alert">
+                        <i class="fas fa-{{ label == 'success' ? 'check-circle' : 'info-circle' }} me-2"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {# --- CONTENU --- #}
+        <div class="flex-grow-1">
+            {% block body %}{% endblock %}
+        </div>
+
+        {# --- FOOTER MODERNE --- #}
+        <footer class="pt-5 pb-4 mt-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <h5 class="fw-bold text-white mb-3">EventShop 🇲🇦</h5>
+                        <p>La première plateforme de billetterie 100% digitale au Maroc. Concerts, théâtres, festivals... réservez votre place en un clic.</p>
+                        <div class="d-flex gap-3 mt-3">
+                            <a href="#" class="fs-5"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="fs-5"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="fs-5"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <h5 class="fw-bold text-white mb-3">L'entreprise</h5>
+                        <ul class="list-unstyled d-flex flex-column gap-2">
+                            <li><a href="#">À propos</a></li>
+                            <li><a href="#">Carrières</a></li>
+                            <li><a href="#">Presse</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <h5 class="fw-bold text-white mb-3">Aide</h5>
+                        <ul class="list-unstyled d-flex flex-column gap-2">
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">CGV</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <h5 class="fw-bold text-white mb-3">Newsletter</h5>
+                        <form class="d-flex gap-2">
+                            <input type="email" class="form-control border-0" placeholder="Votre email...">
+                            <button class="btn btn-warning fw-bold">OK</button>
+                        </form>
+                    </div>
+                </div>
+                <hr class="my-4 border-secondary">
+                <div class="text-center text-muted small">
+                    &copy; {{ 'now'|date('Y') }} EventShop Maroc.
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

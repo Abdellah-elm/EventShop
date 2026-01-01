@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord Admin{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">📊 Tableau de Bord Statistiques</h1>
+
+    {# --- PARTIE 1 : CARTES CHIFFRES CLÉS (KPI) --- #}
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3 shadow">
+                <div class="card-header">Événements</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ totalEvents }}</h2>
+                    <p class="card-text">Concerts en ligne</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3 shadow">
+                <div class="card-header">Utilisateurs</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ totalUsers }}</h2>
+                    <p class="card-text">Clients inscrits</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3 shadow">
+                <div class="card-header">Billets Vendus</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ totalBillets }}</h2>
+                    <p class="card-text">Places réservées</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3 shadow">
+                <div class="card-header">Chiffre d'Affaires</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ chiffreAffaires }} MAD</h2>
+                    <p class="card-text">Revenus estimés</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- PARTIE 2 : GRAPHIQUE --- #}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-white font-weight-bold">
+                    📈 Popularité des Événements
+                </div>
+                <div class="card-body">
+                    <canvas id="eventsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# --- SCRIPT CHART.JS --- #}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('eventsChart').getContext('2d');
+        
+        // Récupération des données envoyées par Symfony
+        const labels = {{ eventNames|raw }};
+        const data = {{ ticketCounts|raw }};
+
+        new Chart(ctx, {
+            type: 'bar', // Type de graphique (bar, line, pie...)
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Nombre de billets vendus',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 } // Pas de virgules pour les billets
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

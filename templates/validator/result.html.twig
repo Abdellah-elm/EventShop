@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100" 
+      style="background-color: {{ success ? '#d1e7dd' : '#f8d7da' }};">
+
+    <div class="card shadow text-center p-4" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            {# GROSSE ICÔNE #}
+            <div style="font-size: 80px;">
+                {{ success ? '✅' : '⛔' }}
+            </div>
+
+            <h1 class="display-6 fw-bold {{ success ? 'text-success' : 'text-danger' }}">
+                {{ success ? 'ACCÈS AUTORISÉ' : 'ACCÈS REFUSÉ' }}
+            </h1>
+
+            <p class="lead">{{ message }}</p>
+            <hr>
+
+            <div class="text-start bg-white p-3 rounded border">
+                <p class="mb-1"><strong>👤 Client :</strong> {{ billet.user.nom }}</p>
+                <p class="mb-1"><strong>🎫 Billet N° :</strong> #{{ billet.id }}</p>
+                <p class="mb-0"><strong>📅 Événement :</strong> {{ billet.event.title }}</p>
+            </div>
+            
+            <a href="{{ path('app_event_index') }}" class="btn btn-dark mt-4 w-100">Retour</a>
+        </div>
+    </div>
+
+</body>
+</html>

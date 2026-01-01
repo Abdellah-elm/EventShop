@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>E-Billet #{{ billet.id }}</title>
+    <style>
+        /* Reset et Base */
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            font-size: 13px;
+        }
+
+        /* Conteneur principal */
+        .ticket-wrap {
+            border: 1px solid #ddd;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 4px; /* Arrondi léger */
+        }
+
+        /* En-tête Noir (Style Premium) */
+        .header {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 15px 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+            border-bottom: 4px solid #f0ad4e; /* Petite touche dorée/orange EventShop */
+        }
+
+        /* Mise en page Tableaux (Obligatoire pour DOMPDF) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 15px;
+            vertical-align: top;
+        }
+
+        /* Colonne Gauche : Infos */
+        .main-info {
+            background-color: #fff;
+            width: 65%;
+            border-right: 2px dashed #ccc; /* Effet pointillé de déchirure */
+        }
+
+        /* Colonne Droite : QR Code */
+        .sidebar {
+            background-color: #f9f9f9;
+            width: 35%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Typographie */
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 22px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+
+        .event-meta {
+            color: #777;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        /* Labels (Date, Lieu...) */
+        .info-block {
+            margin-bottom: 12px;
+        }
+        
+        .label {
+            display: block;
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .price-tag {
+            display: inline-block;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 9px;
+            color: #aaa;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ticket-wrap">
+        
+        <div class="header">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td><strong>EVENTSHOP</strong> TICKET</td>
+                    <td align="right">RÉF #{{ billet.reference|default(billet.id) }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="main-info">
+                    <h1>{{ billet.event.title }}</h1>
+                    <div class="event-meta">Concert / Spectacle</div>
+
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding: 0 15px 15px 0;">
+                                <span class="label">Date & Heure</span>
+                                <span class="value">{{ billet.event.dateStart ? billet.event.dateStart|date('d/m/Y') : 'À confirmer' }}</span><br>
+                                <small style="color:#555">{{ billet.event.dateStart ? billet.event.dateStart|date('H:i') : '' }}</small>
+                            </td>
+                            <td style="padding: 0;">
+                                <span class="label">Lieu</span>
+                                <span class="value">{{ billet.event.location }}</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="info-block">
+                        <span class="label">Détenteur du billet</span>
+                        <span class="value">{{ billet.user.nom|upper }}</span>
+                        <br>
+                        <span style="font-size:11px; color:#666;">{{ billet.user.email }}</span>
+                    </div>
+
+                    <div class="price-tag">
+                        {{ billet.event.price > 0 ? billet.event.price ~ ' MAD' : 'GRATUIT' }}
+                    </div>
+                </td>
+
+                <td class="sidebar">
+                    <div style="margin-bottom: 10px; font-weight:bold; color: #1a1a1a; letter-spacing: 1px;">
+                        SCAN ME
+                    </div>
+                    
+                    <img src="{{ qrCode }}" alt="QR Code" style="width: 140px; height: 140px; border: 4px solid #fff;">
+                    
+                    <div style="margin-top: 15px;">
+                        <span class="label">Statut</span>
+                        <span style="color: green; font-weight: bold; border: 1px solid green; padding: 2px 6px; border-radius: 4px; font-size: 10px;">
+                            VALIDE
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="footer">
+            Ce billet électronique est unique. Une pièce d'identité pourra vous être demandée à l'entrée.<br>
+            Généré le {{ 'now'|date('d/m/Y H:i') }} via EventShop.
+        </div>
+    </div>
+
+</body>
+</html>

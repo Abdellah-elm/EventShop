@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Billets{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4 text-primary">🎟️ Mes Billets de Réservation</h1>
+
+        {# On utilise directement app.user.billets pour être sûr de TOUT voir #}
+        {% if app.user.billets|length > 0 %}
+            <div class="table-responsive shadow-sm">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Réf. Billet</th>
+                            <th>Événement</th>
+                            <th>Lieu</th>
+                            <th>Date & Heure</th>
+                            <th>N° Commande</th>
+                            <th>Statut</th>
+                            <th>action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for billet in app.user.billets %}
+                            <tr>
+                                <td class="fw-bold text-secondary">#{{ billet.id }}</td>
+                                <td><span class="fw-bold">{{ billet.event.title }}</span></td>
+                                <td>{{ billet.event.location }}</td>
+                                {# Correction du nom du champ : dateStart #}
+                                <td>{{ billet.event.dateStart ? billet.event.dateStart|date('d/m/Y H:i') : 'Date non définie' }}</td>
+                                <td>
+                                    {% if billet.commande %}
+                                        <span class="badge bg-outline-dark text-dark border">CMD-{{ billet.commande.id }}</span>
+                                    {% else %}
+                                        <span class="text-muted small">Achat direct</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">{{ billet.status|default('Confirmé') }}</span>
+                                </td>
+                                <td>
+    <a href="{{ path('app_billet_pdf', {'id': billet.id}) }}" class="btn btn-sm btn-danger">
+        📥 PDF
+    </a>
+</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-3">
+                <p class="text-muted small">Total : {{ app.user.billets|length }} billet(s) trouvé(s).</p>
+            </div>
+
+        {% else %}
+            <div class="alert alert-light border text-center py-5">
+                <h3 class="text-muted">Vous n'avez pas encore de billets.</h3>
+                <p>Découvrez nos prochains événements et réservez votre place dès maintenant !</p>
+                <a href="{{ path('app_event_index') }}" class="btn btn-primary mt-3">Voir les événements</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

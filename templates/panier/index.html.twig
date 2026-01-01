@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">🛒 Mon Panier</h1>
+
+    {% if items|length > 0 %}
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Événement</th>
+                            <th>Quantité</th>
+                            <th>Lieu</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>
+                                    <span class="fw-bold">{{ item.event.title }}</span><br>
+                                    <small class="text-muted">{{ item.event.dateStart|date('d/m/Y') }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ item.quantite }} place(s)</span>
+                                </td>
+                                <td>{{ item.event.location }}</td>
+                                <td>
+                                    <a href="{{ path('app_panier_delete', {'id': item.id}) }}" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Résumé</h5>
+                        <hr>
+                        <p class="d-flex justify-content-between">
+                            <span>Total places :</span>
+                            <strong>{{ items|length }} événement(s)</strong>
+                        </p>
+                        <div class="d-grid gap-2 mt-3">
+                            {# Ce bouton pointera vers la validation de commande #}
+                            <a href="{{ path('app_commande_validate') }}" class="btn btn-success btn-lg">
+                                ✅ Confirmer la commande
+                            </a>
+                            <a href="{{ path('app_event_index') }}" class="btn btn-link btn-sm text-decoration-none">Continuer mes achats</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            Votre panier est vide. <br>
+            <a href="{{ path('app_event_index') }}" class="btn btn-primary mt-3">Voir les événements</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
