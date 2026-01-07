@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route; // <-- C'est ICI que ça a changé (Attribute au lieu de Annotation)
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        // C'est cette ligne qui fait la magie de la redirection
+        // Redirige vers la liste des événements
         return $this->redirectToRoute('app_event_index');
     }
 }
