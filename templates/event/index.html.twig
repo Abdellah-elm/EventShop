@@ -4,58 +4,47 @@
 
 {% block body %}
 <div class="container py-5">
-    
     <div class="text-center mb-5">
-        <h1 class="fw-bold display-5 mb-3">Billetterie <span class="text-warning">En Ligne</span></h1>
+        <h1 class="fw-bold display-5">Catalogue</h1>
     </div>
 
-    {# GRILLE DES ÉVÉNEMENTS #}
     <div class="row g-4">
         {% for event in events %}
             
-            {# --- LOGIQUE HARDCODED --- #}
-            {% set image_path = '/images/default.jpeg' %}
-
-            {# On compare l'ID. Note : on utilise id matches pour etre sur #}
+            {# --- 1. DÉFINITION MANUELLE DE L'IMAGE --- #}
+            {% set photo = '/images/default.jpeg' %}
+            
+            {# Adapte ici si besoin, mais laisse comme ça pour tester #}
             {% if event.id == 1 %}
-                {% set image_path = '/images/1.jpeg' %}
+                {% set photo = '/images/1.jpeg' %}
             {% elseif event.id == 2 %}
-                {% set image_path = '/images/2.jpg' %}
+                {% set photo = '/images/2.jpg' %}
             {% elseif event.id == 3 %}
-                {% set image_path = '/images/3.jpeg' %}
+                {% set photo = '/images/3.jpeg' %}
             {% elseif event.id == 4 %}
-                {% set image_path = '/images/4.jpeg' %}
+                {% set photo = '/images/4.jpeg' %}
             {% endif %}
 
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative">
+                <div class="card h-100 shadow-sm">
                     
-                    {# --- DEBUG : AFFICHE L'ID EN ROUGE (A supprimer après) --- #}
-                    <div class="position-absolute top-50 start-50 translate-middle bg-danger text-white fw-bold p-3 rounded shadow" style="z-index: 1000; opacity: 0.9;">
-                        DEBUG ID: {{ event.id }}
+                    {# --- 2. LE DEBUGGER (CARRÉ ROUGE) --- #}
+                    {# C'est ça qui va nous donner la réponse ! #}
+                    <div class="position-absolute top-0 start-0 bg-danger text-white p-2 fw-bold" style="z-index: 100;">
+                        ID: {{ event.id }}
                     </div>
 
-                    {# --- ZONE IMAGE --- #}
-                    <a href="{{ path('app_event_show', {'id': event.id}) }}" class="d-block position-relative overflow-hidden" style="height: 250px;">
-                        
-                        {# IMAGE avec CACHE BUSTER (?v=random) #}
-                        {# Le random() force le navigateur a re-telecharger l'image a chaque fois #}
-                        <img src="{{ image_path }}?v={{ random() }}" 
-                             alt="{{ event.title }}"
-                             class="w-100 h-100"
+                    {# --- 3. L'IMAGE --- #}
+                    <div style="height: 250px; overflow: hidden;">
+                        <img src="{{ photo }}" 
+                             class="w-100 h-100" 
                              style="object-fit: cover;"
-                             onerror="this.src='/images/default.jpeg?v={{ random() }}'">
-                             
-                    </a>
+                             alt="Event Image">
+                    </div>
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold">{{ event.title }}</h5>
-                         {# BOUTON D'ACTION #}
-                        <div class="d-grid mt-3">
-                            <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-dark rounded-pill">
-                                Voir
-                            </a>
-                        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <p class="text-muted">Image chargée : {{ photo }}</p>
                     </div>
                 </div>
             </div>
