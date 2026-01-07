@@ -5,6 +5,13 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    # --- CORRECTION POUR RAILWAY / HTTPS (FIX MIXED CONTENT) ---
+    # Cela permet à Symfony de savoir qu'il est derrière un proxy sécurisé
+    # et de générer correctement les liens en https://
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-host']
+    # -----------------------------------------------------------
+
     #esi: true
     #fragments: true
 
