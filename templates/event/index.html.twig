@@ -50,12 +50,11 @@
                         
                         {# IMAGE PRINCIPALE #}
                         {# Astuce : On essaie .jpg d'abord. Si erreur, le script JS bascule sur .jpeg, puis sur default.jpeg #}
-                        <img src="{{ asset('image/' ~ event.id ~ '.jpg') }}" 
+                        <img src="{{ asset('images/' ~ event.id ~ '.jpg') }}" 
                              alt="{{ event.title }}"
                              class="w-100 h-100"
                              style="object-fit: cover; transition: transform 0.5s ease;"
-                             onerror="this.onerror=null; this.src='{{ asset('image/' ~ event.id ~ '.jpeg') }}'; this.onerror=function(){this.src='{{ asset('images/default.jpeg') }}';};">
-
+                             onerror="this.onerror=null; this.src='{{ asset('images/' ~ event.id ~ '.jpeg') }}'; this.onerror=function(){this.src='{{ asset('images/default.jpeg') }}';};">
                         {# FILTRE NOIR EN BAS (pour que le texte ressorte si besoin) #}
                         <div class="position-absolute bottom-0 start-0 w-100 h-50" 
                              style="background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);"></div>
