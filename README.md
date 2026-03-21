@@ -76,7 +76,7 @@ Si vous souhaitez lancer ce projet sur votre machine :
 
 ---
 
-## 🚀 Déploiement
+##  Déploiement
 
 Ce projet est configuré pour un déploiement continu sur **Railway**.
 * Configuration de l'environnement via variables (`APP_ENV=prod`).
