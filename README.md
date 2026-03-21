@@ -1,7 +1,7 @@
 #  Event Shop Maroc
 
 **Event Shop** est une plateforme web complète de gestion d'événements et de billetterie en ligne. Elle permet aux utilisateurs de découvrir des événements, de réserver des places et de générer instantanément leurs billets électroniques (PDF + QR Code).
-
+![demo](pic/a.png)
 
 ---
 
@@ -19,6 +19,9 @@
 * **Gestion CRUD :** Création, modification et suppression d'événements, d'utilisateurs et de billets.
 * **Sécurité :** Accès restreint par rôles (`ROLE_ADMIN`).
 
+
+![demo](pic/b.png)
+
 ---
 
 ##  Stack Technique
@@ -34,6 +37,11 @@ Ce projet met en œuvre les technologies modernes du développement web PHP :
     * `dompdf/dompdf` : Génération de fichiers PDF.
     * `endroid/qr-code` : Génération de QR Codes dynamiques (nécessite l'extension `gd`).
 * **Déploiement :** Railway (CI/CD via GitHub).
+
+
+![demo](pic/d.png)
+![demo](pic/c.png)
+
 
 ---
 
