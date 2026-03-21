@@ -1,12 +1,11 @@
-# 🎫 Event Shop Maroc
+#  Event Shop Maroc
 
 **Event Shop** est une plateforme web complète de gestion d'événements et de billetterie en ligne. Elle permet aux utilisateurs de découvrir des événements, de réserver des places et de générer instantanément leurs billets électroniques (PDF + QR Code).
 
-> 🚀 **Démo en ligne :** [https://php-production-ebe3.up.railway.app/event/](https://php-production-ebe3.up.railway.app/event/)
 
 ---
 
-## 🌟 Fonctionnalités Principales
+##  Fonctionnalités Principales
 
 ### Pour les Clients (Front-Office)
 * **Catalogue d'événements :** Consultation des événements à venir (Mawazine, Derby Casablanca, Marrakech du Rire...).
@@ -22,7 +21,7 @@
 
 ---
 
-## 🛠️ Stack Technique
+##  Stack Technique
 
 Ce projet met en œuvre les technologies modernes du développement web PHP :
 
@@ -38,7 +37,7 @@ Ce projet met en œuvre les technologies modernes du développement web PHP :
 
 ---
 
-## 💻 Installation Locale
+##  Installation Locale
 
 Si vous souhaitez lancer ce projet sur votre machine :
 
