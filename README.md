@@ -64,7 +64,7 @@ Le chatbot est accessible via le **widget flottant** (bulle 💬 en bas à droit
 * Support client en français, 24h/24
 
 **Architecture :** Le chatbot interroge la base de données en temps réel pour fournir des informations à jour sur les événements, puis utilise l'API Groq (Llama 3.3 70B) pour générer des réponses contextuelles et naturelles.
-
+![demo](pic/WhatsApp Image 2026-03-31 at 02.26.45.jpeg)
 ---
 
 ## Installation Locale
