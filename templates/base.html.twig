@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
+{% block stylesheets %}
+   
+    {{ importmap('app') }}
+    
+  
+    {{ encore_entry_link_tags('app') }}
+    
+ 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{% endblock %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}EventShop{% endblock %}</title>
