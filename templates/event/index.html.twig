@@ -38,7 +38,7 @@
             {% set sold = event.billets|length %}
             {% set remaining = event.capacity - sold %}
 
-            {% set image_path = '/images/can-2025-maroc-chaines.jpeg' %}
+            {% set image_path = event.imageName ? '/uploads/events/' ~ event.imageName : '/images/default.jpeg' %}
 
 
             <div class="col-md-6 col-lg-4">

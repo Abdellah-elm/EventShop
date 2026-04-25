@@ -9,6 +9,7 @@
 parameters:
 
     app.groq_api_key: "%env(GROQ_API_KEY)%"
+    app.events_images_directory: "%kernel.project_dir%/public/uploads/events"
 services:
     # default configuration for services in *this* file
     _defaults:

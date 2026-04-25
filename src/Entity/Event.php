@@ -37,6 +37,9 @@ class Event
     #[ORM\Column(nullable: true)]
     private ?float $price = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageName = null;
+
     /**
      * @var Collection<int, Billet>
      * * IMPORTANT : orphanRemoval: true et cascade: ['remove']
@@ -135,6 +138,18 @@ class Event
     public function setPrice(?float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): static
+    {
+        $this->imageName = $imageName;
 
         return $this;
     }

@@ -55,12 +55,6 @@ class AdminController extends AbstractController
     }
 
     #[Route('/event/{id}/export', name: 'app_admin_export_guests')]
-    #[Route('/event/{id}/export', name: 'app_admin_export_guests')]
-   
-    #[Route('/event/{id}/export', name: 'app_admin_export_guests')]
-   
-
-    #[Route('/event/{id}/export', name: 'app_admin_export_guests')]
     public function exportGuests(Event $event): Response
     {
         $csvContent = [];

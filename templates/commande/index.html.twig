@@ -9,24 +9,21 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Total</th>
-                <th>Quantite</th>
                 <th>Statut</th>
-                <th>Date_creation</th>
-                <th>actions</th>
+                <th>Date de commande</th>
+                <th>Billets</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for commande in commandes %}
             <tr>
                 <td>{{ commande.id }}</td>
-                <td>{{ commande.total }}</td>
-                <td>{{ commande.quantite }}</td>
                 <td>{{ commande.statut }}</td>
-                <td>{{ commande.dateCreation ? commande.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ commande.dateCommande ? commande.dateCommande|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ commande.billets|length }}</td>
                 <td>
                     <a href="{{ path('app_commande_show', {'id': commande.id}) }}">show</a>
-                    <a href="{{ path('app_commande_edit', {'id': commande.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

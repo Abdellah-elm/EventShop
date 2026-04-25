@@ -67,7 +67,7 @@ class ChatbotController extends AbstractController
 
         } catch (\Exception $e) {
             return $this->json([
-                'reply' => 'Service indisponible'()
+                'reply' => 'Service indisponible'
             ], 500);
         }
     }

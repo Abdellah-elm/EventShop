@@ -14,7 +14,7 @@
 {% elseif 'sport' in titre %}{% set gradient = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' %}{% set icon = 'fa-futbol' %}
 {% endif %}
 
-<div class="text-white py-5 mb-5" style="background: {{ gradient }};">
+<div class="text-white py-5 mb-5" style="background: {{ gradient }}; {% if event.imageName %}background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('/uploads/events/{{ event.imageName }}'); background-size: cover; background-position: center;{% endif %}">
     <div class="container py-4">
         <div class="row align-items-center">
             <div class="col-lg-8">

@@ -12,20 +12,16 @@
                 <td>{{ commande.id }}</td>
             </tr>
             <tr>
-                <th>Total</th>
-                <td>{{ commande.total }}</td>
-            </tr>
-            <tr>
-                <th>Quantite</th>
-                <td>{{ commande.quantite }}</td>
-            </tr>
-            <tr>
                 <th>Statut</th>
                 <td>{{ commande.statut }}</td>
             </tr>
             <tr>
-                <th>Date_creation</th>
-                <td>{{ commande.dateCreation ? commande.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date de commande</th>
+                <td>{{ commande.dateCommande ? commande.dateCommande|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Billets</th>
+                <td>{{ commande.billets|length }}</td>
             </tr>
         </tbody>
     </table>
