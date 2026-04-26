@@ -8,6 +8,9 @@
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-blueviolet?logo=bootstrap)
 ![Groq](https://img.shields.io/badge/Chatbot_IA-Groq_/_Llama_3.3-green)
 
+https://github.com/user-attachments/assets/cb497125-e2bb-4e09-8f13-96a8bd9cb1ae
+
+
 ![demo](pic/a.png)
 
 ---
