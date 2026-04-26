@@ -1,5 +1,8 @@
 {
     "deploy": {
         "webroot": "/public"
+    },
+    "configuration": {
+        "enable_https_redirect": true
     }
 }
