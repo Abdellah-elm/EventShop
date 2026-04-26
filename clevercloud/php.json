@@ -1,6 +1,10 @@
 {
     "deploy": {
-        "webroot": "/public"
+        "webroot": "/public",
+        "beforeStarting": [
+            "php bin/console doctrine:migrations:migrate --no-interaction",
+            "php bin/console doctrine:fixtures:load --no-interaction --append"
+        ]
     },
     "configuration": {
         "enable_https_redirect": true
