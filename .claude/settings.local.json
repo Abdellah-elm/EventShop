@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php bin/console dbal:run-sql \"SELECT id, title, image_name FROM event ORDER BY id\")",
+      "Bash(cp \"/c/Users/abdellah/EventShop/public/images/download.jpeg\" \"/c/Users/abdellah/EventShop/public/uploads/events/download.jpeg\")",
+      "Bash(php bin/console dbal:run-sql \"UPDATE event SET image_name = '66.jpeg' WHERE id = 2\")",
+      "Bash(php bin/console dbal:run-sql \"UPDATE event SET image_name = 'download.jpeg' WHERE id = 3\")",
+      "Bash(php bin/console dbal:run-sql \"UPDATE event SET image_name = '2.jpg' WHERE id = 4\")",
+      "Bash(php bin/console dbal:run-sql \"UPDATE event SET image_name = 'default.jpeg' WHERE id NOT IN \\(1,2,3,4\\)\")",
+      "Bash(php bin/console cache:clear)"
+    ]
+  }
+}
